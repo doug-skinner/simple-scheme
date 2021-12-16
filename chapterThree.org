@@ -1,0 +1,123 @@
+#+TITLE: Chapter Three
+
+* Expressions
+
+Scheme treats everything that is typed into it as an expression. The expression can be a single value, like =26= or something more complicated in parenthesis, such as =(+ 14 7)=. The first kind of an expression is called an /atom/ (or /atomic expression/), while the second kind is called a /compound expression/ because it's made out of the smaller expressions =+=, =14=, =7=. The metaphor is from chemistry, where atoms of single element can be combined with other to form chemical compounds. We can call the expressions within the compund expression its /subexpressions/.
+
+These compound expressions are how we tell Scheme to "do" a thing. The idea is so important that we have made many names for this, like "calling" a procedure, "invoking" a procedure, "applying" a procedure, etc. These all mean the same thing.
+
+This is different from most other languages, which have different kinds of expressions like a "print statement" or an "assignment statement". In Scheme, everything is done by calling procedures, which means that everything we want to do is a compound expression.
+
+Now, because a compund expression contains expressions, it can be hard to understand expressions without understanding expressions. The way we break the cycle is by continuing down the stack of expressions until we hit the atomic expressions.
+
+An example is addition. Once you understand that numbers are themselves without referencing something else, it becomes very easy to see how addition works, and doesn't need another function. Then, you can add in more calls using the addition operator, and it still makes sense. For example, once you understand what this means:
+
+#+begin_src scheme :exports both
+(+ 1 2)
+#+end_src
+
+#+RESULTS:
+: 3
+
+Then it becomes trivial to understand this:
+
+#+begin_src scheme :exports both
+(+ (+ 1 2) (+ 3 4))
+#+end_src
+
+#+RESULTS:
+: 10
+
+** Little people
+
+A basic description of how functions and instructions work inside a computer using people as functions.
+
+** Pitfalls
+
+People can run into the following problems:
+
+- Thinking that expressions are evaluated left to right
+- Thinging that scheme cares about whitespace
+- Not matching up parenthesis
+
+** Boring Exercises
+
+*** Exercise 3.1
+
+Translate the arithmetic expressions (3+4)×5 and 3+(4×5) into Scheme expressions, and into plumbing diagrams.
+
+#+begin_src scheme :exports both
+(+ 3 (* 4 5))
+#+end_src
+
+#+RESULTS:
+: 23
+
+#+begin_src scheme :exports both
+(* 5 (+ 3 4))
+#+end_src
+
+#+RESULTS:
+: 35
+
+*** Exercise 3.2
+
+- 3
+- 4
+- 10
+
+*** Exercise 3.3
+
+-
+
+*** Exercise 3.4
+
+- Tom (-) takes in 4 & 7 and hands -3 to Bob
+- Deb (-) takes in 3 & 5 and hands -2 to Dave
+- Bob (*) takes in 3 & -3 and hands -9 to Jill
+- Dave (-) takes in 8 & -2 and hands 10 to Jill
+- Jill (+) takes in 10 & -9 and returns 1
+
+*** Exercuse 3.5
+
+Evaluate each of the following expressions using the result replacement technique:
+
+(sqrt (+ 6 (* 5 2))) = (sqrt (+ 6 10)) = (sqrt 16) = 4
+
+(+ (+ (+ 1 2) 3) 4) = (+ (+ 3 3) 4) = (+ 6 4) = 10
+
+*** Exercise 3.6
+
+Not drawing a diagram.
+
+*** Exercise 3.7
+
+What value is returned by (/ 1 3) in your version of Scheme? (Some Schemes return a decimal fraction like 0.33333, while others have exact fractional values like 1/3 built in.)
+
+#+begin_src scheme :exports both
+(/ 1 3)
+#+end_src
+
+#+RESULTS:
+: 1/3
+
+Looks like I have actual fractional values, which is good. MIT Scheme for the win.
+
+*** Exercise 3.8
+
+Not doing
+
+*** Exercise 3.9
+
+The expression (+ 8 2) has the value 10. It is a compound expression made up of three atoms. For this problem, write five other Scheme expressions whose values are also the number ten:
+
+- An atom
+  - (10)
+- Another compound expression made up of three atoms
+  - (- 13 3)
+- A compound expression made up of four atoms
+  - (+ 5 3 2)
+- A compound expression made up of an atom and two compound subexpressions
+  - (+ (+ 1 2) (+ 3 4))
+- Any other kind of expression
+  - (+ 10)

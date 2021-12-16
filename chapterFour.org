@@ -1,0 +1,31 @@
+#+TITLE: Chapter Four
+
+* Defining Your Own Procedures
+
+Every scheme program consists of one or more /procedures/. We can define our own procedures like this:
+
+#+begin_src scheme :exports both
+(define (square x)
+  (* x x))
+#+end_src
+
+This is the definition of a procedure called square. Square takes one argument, a number, and it returns the square of that number. Once you have defined square, you can use it just the same way as you use primitive procedures:
+
+#+begin_src scheme :exports both
+(define (square x)
+  (* x x))
+
+(square 7)
+#+end_src
+
+#+RESULTS:
+: 49
+
+The procedure definition has four parts:
+
+- The word /define/ means that we are about to define something
+- Then the name that we want to give the procedure
+- Then the names for it's arguments
+- Finally the /body/ which is the actual expression of the procedure
+
+** Special Forms

@@ -1,0 +1,6 @@
+#+TITLE: Chapter Two
+
+
+** Functions
+
+Nothing to really note, just introducing functional programming.
