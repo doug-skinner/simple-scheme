@@ -9,7 +9,7 @@ The first thing I had to do was get setup with the necessary dependecy files. On
 
 I will be talking to scheme through code snippets within these emacs files. Let's see how this looks:
 
-#+BEGIN_SRC scheme
+#+BEGIN_SRC scheme :exports both
 (load "progs-from-book/simply.scm")
 (word 'comp 'uter)
 #+END_SRC
