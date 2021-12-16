@@ -9,7 +9,7 @@ The first thing I had to do was get setup with the necessary dependecy files. On
 
 I will be talking to scheme through code snippets within these emacs files. Let's see how this looks:
 
-#+BEGIN_SRC scheme :exports both
+#+begin_src scheme :exports both :exports both
 (load "progs-from-book/simply.scm")
 (word 'comp 'uter)
 #+END_SRC
@@ -23,7 +23,7 @@ I will be talking to scheme through code snippets within these emacs files. Let'
 
 Our first program will simply take in a phrase and return the Acronym for that phrase, consisting of the first letter of each word.
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 (define (acronym phrase)
   (accumulate word (every first phrase)))
@@ -36,7 +36,7 @@ Our first program will simply take in a phrase and return the Acronym for that p
 
 Now let's go through what each of those functions do, in order to better understand what's going on. The =first= command is one that is loaded in by the file provided by the book. As we can see, it returns the first character of the passed in string.
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 (first 'american)
 #+end_src
@@ -46,7 +46,7 @@ Now let's go through what each of those functions do, in order to better underst
 
 Now we can use the =every= function in order to run the first function against each of the passed in strings. This gives us a list of results.
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 (every first '(american civil liberties union))
 #+end_src
@@ -56,7 +56,7 @@ Now we can use the =every= function in order to run the first function against e
 
 And finally we can use the =accumulate= function to turn that list back into a string.
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 (accumulate word '(a c l u))
 #+end_src
@@ -66,7 +66,7 @@ And finally we can use the =accumulate= function to turn that list back into a s
 
 In the real world, we would expect that certain words would be excluded from acronyms. Let's give it a shot:
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 
 (define (acronym phrase)
@@ -80,7 +80,7 @@ In the real world, we would expect that certain words would be excluded from acr
 
 Uh oh. Looks like we're not excluding common filler words. Let's fix that.
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 
 (define (acronym phrase)
@@ -100,7 +100,7 @@ The next example that is given in chapter one is to make a pig latin function. B
 
 It's defined as follows:
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 
 (define (pigl wd)
@@ -116,7 +116,7 @@ It's defined as follows:
 
 A fuller example can be seen here:
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 
 (define (pigl wd)
@@ -147,7 +147,7 @@ My guess: Well, it seems to take in three arrays. Then it takes every item in ev
 
 Let's run it with this example and see:
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 
 (define (choices menu)
@@ -182,7 +182,7 @@ I feel like there has to be an easier way to do that. But I could be wrong. Mayb
 
 Including this just for posterity
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 
 (define (prepend-every item lst)
@@ -213,7 +213,7 @@ Including this just for posterity
 
 *** Examples: factorial
 
-#+begin_src scheme
+#+begin_src scheme :exports both
 (load "progs-from-book/simply.scm")
 
 (define (factorial n)
