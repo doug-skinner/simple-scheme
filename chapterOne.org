@@ -1,0 +1,227 @@
+#+TITLE: Chapter One
+
+* Showing Scheme
+
+The first thing I had to do was get setup with the necessary dependecy files. On my system I am putting them in the directory =progs-from-book=, which you will see me load in the below code snippets.
+
+** Talking to scheme
+
+I will be talking to scheme through code snippets within these emacs files. Let's see how this looks:
+
+#+BEGIN_SRC scheme
+(load "progs-from-book/simply.scm")
+(word 'comp 'uter)
+#+END_SRC
+
+#+RESULTS:
+: computer
+
+** Working through the examples
+
+*** Example: Acronyms
+
+Our first program will simply take in a phrase and return the Acronym for that phrase, consisting of the first letter of each word.
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+(define (acronym phrase)
+  (accumulate word (every first phrase)))
+
+(acronym '(american civil liberties union))
+#+end_src
+
+#+RESULTS:
+: aclu
+
+Now let's go through what each of those functions do, in order to better understand what's going on. The =first= command is one that is loaded in by the file provided by the book. As we can see, it returns the first character of the passed in string.
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+(first 'american)
+#+end_src
+
+#+RESULTS:
+: a
+
+Now we can use the =every= function in order to run the first function against each of the passed in strings. This gives us a list of results.
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+(every first '(american civil liberties union))
+#+end_src
+
+#+RESULTS:
+| a | c | l | u |
+
+And finally we can use the =accumulate= function to turn that list back into a string.
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+(accumulate word '(a c l u))
+#+end_src
+
+#+RESULTS:
+: aclu
+
+In the real world, we would expect that certain words would be excluded from acronyms. Let's give it a shot:
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+
+(define (acronym phrase)
+  (accumulate word (every first phrase)))
+
+(acronym '(united states of america))
+#+end_src
+
+#+RESULTS:
+: usoa
+
+Uh oh. Looks like we're not excluding common filler words. Let's fix that.
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+
+(define (acronym phrase)
+  (accumulate word (every first (keep real-word? phrase))))
+
+(define (real-word? wd)
+  (not (member? wd '(a the an in of and for to with))))
+
+(acronym '(united states of america))
+#+end_src
+
+See? There we go. What we did there is define a function called =real-world?= that takes in a string, matches it against a list of strings, and returns true (#T) or false (#F) depending on whether the passed in string exists in the list. By passing this in to the =keep= function we are able to exclude certain filler words.
+
+*** Example: Pig Latin
+
+The next example that is given in chapter one is to make a pig latin function. Basically, take a word. If the first letter is a vowel, just add "ay" to the end. If the first letter is not a vowel, then move letters to the end until you reacha vowel, then add "ay".
+
+It's defined as follows:
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+
+(define (pigl wd)
+  (if (member? (first wd) 'aeiou)
+      (word wd 'ay)
+      (pigl (word (butfirst wd) (first wd)))))
+
+(pigl 'spaghetti)
+#+end_src
+
+#+RESULTS:
+: aghettispay
+
+A fuller example can be seen here:
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+
+(define (pigl wd)
+  (if (member? (first wd) 'aeiou)
+      (word wd 'ay)
+      (pigl (word (butfirst wd) (first wd)))))
+
+(every pigl '(the ballad of john and yoko))
+#+end_src
+
+#+RESULTS:
+| ethay | alladbay | ofay | ohnjay | anday | okoyay |
+
+*** Example: Ice Cream Choices
+
+Let's see... They give a scheme program without really telling what it does. Let's see if I can figure it out before running it...
+
+My guess: Well, it seems to take in three arrays. Then it takes every item in every array and combines them. So if my arrays were as follows: [small, large]., [red, blue], [dog, cat] then I would get the following:
+
++ small red dog
++ small red cat
++ small blue dog
++ small blue cat
++ large red dog
++ large red cat
++ large blue dog
++ large blue cat
+
+Let's run it with this example and see:
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+
+(define (choices menu)
+  (if (null? menu)
+      '(())
+      (let ((smaller (choices (cdr menu))))
+        (reduce append
+            (map (lambda (item) (prepend-every item smaller))
+                 (car menu))))))
+
+(define (prepend-every item lst)
+  (map (lambda (choice) (se item choice)) lst))
+
+(choices '((small large)
+           (red blue)
+           (dog cat)))
+#+end_src
+
+#+RESULTS:
+| small | red  | dog |
+| small | red  | cat |
+| small | blue | dog |
+| small | blue | cat |
+| large | red  | dog |
+| large | red  | cat |
+| large | blue | dog |
+| large | blue | cat |
+
+I feel like there has to be an easier way to do that. But I could be wrong. Maybe I'll revisit this later on.
+
+*** Example: Combinations from a set
+
+Including this just for posterity
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+
+(define (prepend-every item lst)
+  (map (lambda (choice) (se item choice)) lst))
+
+(define (combinations size set)
+  (cond ((= size 0) '(()))
+        ((empty? set) '())
+        (else (append (prepend-every (first set)
+                                     (combinations (- size 1)
+                                                   (butfirst set)))
+                      (combinations size (butfirst set))))))
+
+(combinations 3 '(a b c d e))
+#+end_src
+
+#+RESULTS:
+| a | b | c |
+| a | b | d |
+| a | b | e |
+| a | c | d |
+| a | c | e |
+| a | d | e |
+| b | c | d |
+| b | c | e |
+| b | d | e |
+| c | d | e |
+
+*** Examples: factorial
+
+#+begin_src scheme
+(load "progs-from-book/simply.scm")
+
+(define (factorial n)
+  (if (= n 0)
+      1
+      (* n (factorial (- n 1)))))
+
+(factorial 1000)
+#+end_src
+
+#+RESULTS:
+: 402387260077093773543702433923003985719374864210714632543799910429938512398629020592044208486969404800479988610197196058631666872994808558901323829669944590997424504087073759918823627727188732519779505950995276120874975462497043601418278094646496291056393887437886487337119181045825783647849977012476632889835955735432513185323958463075557409114262417474349347553428646576611667797396668820291207379143853719588249808126867838374559731746136085379534524221586593201928090878297308431392844403281231558611036976801357304216168747609675871348312025478589320767169132448426236131412508780208000261683151027341827977704784635868170164365024153691398281264810213092761244896359928705114964975419909342221566832572080821333186116811553615836546984046708975602900950537616475847728421889679646244945160765353408198901385442487984959953319101723355556602139450399736280750137837615307127761926849034352625200015888535147331611702103968175921510907788019393178114194545257223865541461062892187960223838971476088506276862967146674697562911234082439208160153780889893964518263243671616762179168909779911903754031274622289988005195444414282012187361745992642956581746628302955570299024324153181617210465832036786906117260158783520751516284225540265170483304226143974286933061690897968482590125458327168226458066526769958652682272807075781391858178889652208164348344825993266043367660176999612831860788386150279465955131156552036093988180612138558600301435694527224206344631797460594682573103790084024432438465657245014402821885252470935190620929023136493273497565513958720559654228749774011413346962715422845862377387538230483865688976461927383814900140767310446640259899490222221765904339901886018566526485061799702356193897017860040811889729918311021171229845901641921068884387121855646124960798722908519296819372388642614839657382291123125024186649353143970137428531926649875337218940694281434118520158014123344828015051399694290153483077644569099073152433278288269864602789864321139083506217095002597389863554277196742822248757586765752344220207573630569498825087968928162753848863396909959826280956121450994871701244516461260379029309120889086942028510640182154399457156805941872748998094254742173582401063677404595741785160829230135358081840096996372524230560855903700624271243416909004153690105933983835777939410970027753472000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
